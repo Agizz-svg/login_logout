@@ -12,10 +12,13 @@
 
   <div class="search-box">
   <input type="text" class="cari" placeholder="Ketik nama/alamat...">
-    
-
-    
   </div>
+
+  <h3> Tambah Data Warga</h3>
+  <p>Nama: <input type="text" id="nama" name="nama"></p>
+  <p>Alamat: <input type="text" id="alamat" name="alamat"></p>
+  <button type="button" id="tambahBtn">Tambah</button>
+  <hr>
 
   <table border="1" cellpadding="10" cellspacing="0">
     <thead>
