@@ -1,4 +1,56 @@
 $(document).ready(function () {
+  function loadBlokDropdown() {
+    $.post("tugas.php", {action: "get_alamat_list"}, function(list){
+       console.log("Data blok diterima:", list); 
+
+      let options = '<option value="">Pilih Blok</option>';
+      list.forEach(function (item) {
+        options += `<option value="${item.id_blok}">${item.nama_blok}</option>`;
+      });
+
+      $("#alamat").html(options);
+      $("#edit_alamat").html(options);
+    }, "json") .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error("Gagal ambil alamat:", textStatus, errorThrown); 
+        console.error("Response:", jqXHR.responseText);
+  });
+}
+
+  loadBlokDropdown(); // Panggil saat halaman load
+
+   // Tampilkan modal master data
+  $("#masterBtn").click(function () {
+    window.location.href = "master_data.php";
+
+  });
+
+   // Tambah data warga
+  $("#tambahBtn").click(function () {
+    var nama = $("#nama").val().trim();
+    var nama_blok = $("#alamat").val();
+
+    if (!nama || !nama_blok) {
+      alert("Nama dan blok harus diisi!");
+      return;
+    }
+
+    $.post("tugas.php", {action: "tambah", nama: nama, nama_blok: nama_blok}, function(res){
+      if(res === "success"){
+        alert("Data warga berhasil ditambahkan!");
+        $(".cari").keyup(); // reload tabel
+      } else {
+        alert("Gagal menambahkan data!");
+      }
+    });
+  });
+
+
+
+
+  // ⬇ Load data warga pertama kali
+  $.post('tugas.php', { action: 'cari_warga', keyword: '' }, function (res) {
+    $("#hasil").html(res.html);
+  }, "json");
 
 
 
@@ -16,14 +68,16 @@ $(document).ready(function () {
     
   
    
-    $("body").on(" keyup",".cari",function(){
+    $("body").on("keyup",".cari",function(){
         var cari = $(this).val();
               
       // alert(cari);
         $.ajax({
           url: 'tugas.php',
           method: 'POST',
-          data: { keyword: cari },
+          data: {
+             action: 'cari_warga',
+             keyword: cari },
           success: function (data) {
             $("#hasil").html(data);
           },
@@ -58,7 +112,7 @@ $(document).ready(function () {
       var data = JSON.parse(res);
       $("#edit_id").val(data.id);
       $("#edit_nama").val(data.nama);
-      $("#edit_alamat").val(data.alamat);
+      $("#edit_alamat").val(data.id_blok).trigger("change");
       $("#editModal").show();
     });
   });
@@ -67,68 +121,28 @@ $(document).ready(function () {
   $("#updateBtn").click(function(){
     var id     = $("#edit_id").val();
     var nama   = $("#edit_nama").val();
-    var alamat = $("#edit_alamat").val();
+    var id_blok = $("#edit_alamat").val();
+    var alamatText = $("#edit_alamat option:selected").text();
 
-    console.log("Data dikirim:", id, nama, alamat)
+    console.log("Data dikirim:", id, nama, id_blok)
 
-    $.post("tugas.php", {action:"update", id:id, nama:nama, alamat:alamat}, function(res){
-      if(res == "success"){
+    $.post("tugas.php", {action:"update", id:id, nama:nama, nama_blok: id_blok}, function(res){
+      console.log("Respon server:", res);
+
+      var data = typeof res === "string" ? JSON.parse(res) : res;
+
+      if(res.status == "success"){
         $(".nama_"+id).text(nama);
-        $(".alamat_"+id).text(alamat);
+        $(".alamat_"+id).text(alamatText);
+
         $("#editModal").hide();
+        alert("Data berhasil diupdate!");
+      } else {
+        alert("Gagal update: " + (data.pesan || "Error server"));
       }
-    });
-  });
-
-  // *Tambah data*
-    $("#tambahBtn").click(function () {
-        var nama = $("#nama").val();
-        var alamat = $("#alamat").val();
-
-        if (nama === '' || alamat === '') {
-            alert("Nama dan Alamat tidak boleh kosong!");
-            return;
-        }
-
-          $.post("tugas.php", {
-            action: "tambah",
-            nama: nama,
-            alamat: alamat
-          }, function (res) {
-            // Asumsikan res adalah JSON berisi id, nama, alamat dari data baru
-            console.log("Respon dari server", res);
-            try {
-                var data = typeof res === "string" ? JSON.parse(res) : res;
-                if (data.status === "success") {
-                    alert("Data berhasil ditambahkan!");
-
-                    // Buat baris baru untuk tabel
-                    var no = $("#hasil tr").length + 1; // nomor urut baru
-                    var newRow = `
-                        <tr id="row-${data.id}">
-                            <td>${no}</td>
-                            <td class="nama_${data.id}">${data.nama}</td>
-                            <td class="alamat_${data.id}">${data.alamat}</td>
-                            <td>
-                                <button class="hapusBtn" data-id="${data.id}">Hapus</button>
-                                <button class="editBtn" data-id="${data.id}">Edit</button>
-                            </td>
-                        </tr>
-                    `;
-// Tambahkan baris ke tbody
-                    $("#hasil").append(newRow);
-
-                    // Reset form input
-                    $("#nama").val('');
-                    $("#alamat").val('');
-                } else {
-                    alert("Gagal menambahkan data: " + (data.pesan || ""));
-                }
-            } catch (e) {
-                console.error("Parsing JSON gagal:", res);
-                alert("Response error!");
-            }
         }, "json");
+      
 });
+
 
 
