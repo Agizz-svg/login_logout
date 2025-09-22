@@ -8,16 +8,19 @@
 </head>
 <body>
 
+  
+
   <h1>Pencarian Data Warga</h1>
 
   <div class="search-box">
-  <input type="text" class="cari" placeholder="Ketik nama/alamat...">
+    <input type="text" class="cari" placeholder="Ketik nama/alamat...">
   </div>
 
   <h3> Tambah Data Warga</h3>
   <p>Nama: <input type="text" id="nama" name="nama"></p>
-  <p>Alamat: <input type="text" id="alamat" name="alamat"></p>
+  <p>Blok: <select id="alamat" name="alamat"></select></p>
   <button type="button" id="tambahBtn">Tambah</button>
+  <button id="masterBtn">Master Data</button>
   <hr>
 
   <table border="1" cellpadding="10" cellspacing="0">
@@ -37,11 +40,11 @@
       <h3>Edit data Warga</h3>
       <input type="hidden" id="edit_id">
       <p>Nama: <input type="text" id="edit_nama"></p>
-      <p>Alamat: <input type="text" id="edit_alamat"></p>
+      <p>Alamat: <select id="edit_alamat"></select></p>
       <button id="updateBtn">Update</button>
       <button onclick="$('#editModal').hide()">Tutup</button>
   </div>
-
+  
   <script src="tugas.js"></script>
 </body>
 </html>
