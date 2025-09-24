@@ -1,9 +1,19 @@
 <?php
+session_start();
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
+
+<?php
 include "jaringan.php";
 
 // Ambil semua data alamat
 $result = $koneksi->query("SELECT * FROM alamat ORDER BY id_blok ASC");
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,15 +40,16 @@ $result = $koneksi->query("SELECT * FROM alamat ORDER BY id_blok ASC");
   <table border="1" cellpadding="10" cellspacing="0">
     <thead>
       <tr>
-        <th>ID Blok</th>
+        <th>No</th>
         <th>Nama Blok</th>
         <th>Aksi</th>
       </tr>
     </thead>
 <tbody id="alamatTable">
+    <?php $no = 1; ?>
     <?php while ($row = $result->fetch_assoc()) { ?>
         <tr id="alamat-<?php echo $row['id_blok']; ?>">
-            <td><?php echo $row['id_blok']; ?></td>
+            <td><?php echo $no++; ?></td>
             <td><?php echo $row['nama_blok']; ?></td>
             <td>
                 <button class="hapusAlamatBtn" data-id="<?php echo $row['id_blok']; ?>">Hapus</button>

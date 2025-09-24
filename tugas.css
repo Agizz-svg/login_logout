@@ -6,39 +6,42 @@ body {
 
 h1 {
   text-align: center;
-  color: hsl(313, 100%, 50%);
+  color: rgb(0, 119, 255);
 }
 
 .search-box {
   text-align: center;
   margin-bottom: 20px;
+  
+  
 }
 
 input[type="text"] {
+  color: white;
   padding: 10px;
   width: 300px;
-  border: 2px solid #aaa;
+  border: 2px solid white;
   border-radius: 5px;
-  background-color: pink;
+  background-color: rgb(0, 119, 255);
 }
 
 button {
   padding: 10px 20px;
-  background-color:pink;
-  color: #180202;
-  border: 2px solid #aaa;
+  background-color: rgb(0, 119, 255);
+  color: white;
+  border: 2px solid white;
   border-radius: 5px;
   margin-left: 10px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: hsl(270, 55%, 24%);
+  background-color: rgb(0, 119, 255);
 }
 
 table {
   width: 100%;
-  border: 2px solid pink;
+  border: 2px solid rgb(0, 119, 255);
   border-radius: 5px;
   background: white;
   box-shadow: 0 0 10px rgba(208, 243, 9, 0.842);
@@ -52,7 +55,7 @@ th, td {
 }
 
 th {
-  background-color: hsl(330, 100%, 50%);
+  background-color: rgb(0, 119, 255);
   color: white;
 
 }
