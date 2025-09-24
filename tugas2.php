@@ -1,3 +1,13 @@
+<?php
+session_start();
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +18,8 @@
 </head>
 <body>
 
-  
+
+   
 
   <h1>Pencarian Data Warga</h1>
 
@@ -34,6 +45,13 @@
     </thead>
     <tbody id="hasil"></tbody>
   </table>
+
+  <div style="text-align: right; margin-top: 20px;">
+    <a href="logout.php">
+      <button>Logout</button>
+    </a>
+  </div>
+  
 
   <!-- Modal Edit -->
   <div id="editModal" style="display:none; border:1px solid #333; padding:20px; background:#eee;">
